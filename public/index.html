@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RESPOND AI Test</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #response {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f3f3f3;
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+
+        #status {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>RESPOND AI Test</h1>
+
+    <p>
+        Test whether GPT-OSS 120B can respond to a workshop prompt.
+    </p>
+
+    <textarea
+        id="message"
+        placeholder="Enter your question here..."
+    ></textarea>
+
+    <br>
+
+    <button onclick="sendMessage()">
+        Ask AI
+    </button>
+
+    <div id="status"></div>
+
+    <div id="response">
+        AI response will appear here.
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById("message").value;
+            const status = document.getElementById("status");
+            const responseBox = document.getElementById("response");
+
+            if (!message.trim()) {
+                status.textContent = "Please enter a message.";
+                return;
+            }
+
+            status.textContent = "AI is thinking...";
+            responseBox.textContent = "";
+
+            try {
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Something went wrong.");
+                }
+
+                status.textContent = "Success!";
+                responseBox.textContent = data.response;
+
+            } catch (error) {
+                status.textContent = "Error";
+                responseBox.textContent = error.message;
+            }
+        }
+    </script>
+
+</body>
+</html>
