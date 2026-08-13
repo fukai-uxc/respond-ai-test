@@ -6,10 +6,10 @@ const Groq = require("groq-sdk");
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+
 app.use(express.static("public"));
 
 const groq = new Groq({
@@ -56,6 +56,4 @@ app.post("/api/chat", async function (req, res) {
     }
 });
 
-app.listen(PORT, function () {
-    console.log("Server running at http://localhost:" + PORT);
-});
+module.exports = app;
