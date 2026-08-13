@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const Groq = require("groq-sdk");
-const path = require("path");
 
 dotenv.config();
 
@@ -13,10 +12,6 @@ app.use(express.json());
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
-});
-
-app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
 app.post("/api/chat", async function (req, res) {
